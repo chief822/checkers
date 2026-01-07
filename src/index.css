@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222 47% 11%;
+    --foreground: 213 31% 91%;
+    --card: 222 47% 15%;
+    --card-foreground: 213 31% 91%;
+    --popover: 222 47% 15%;
+    --popover-foreground: 213 31% 91%;
+    --primary: 268 100% 65%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 217 91% 60%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 223 47% 20%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 268 100% 65%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 223 47% 25%;
+    --input: 223 47% 25%;
+    --ring: 268 100% 65%;
+    --radius: 0.5rem;
+    --chart-1: 268 100% 65%;
+    --chart-2: 217 91% 60%;
+    --chart-3: 142 76% 36%;
+    --chart-4: 47 96% 53%;
+    --chart-5: 0 84% 60%;
+    --player1: 0 84% 60%;
+    --player2: 0 0% 13%;
+    --board-dark: 142 35% 35%;
+    --board-light: 85 40% 85%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+  }
+}
+
+@layer components {
+  .checker-piece {
+    @apply rounded-full w-full h-full flex items-center justify-center cursor-pointer transition-all duration-200;
+    @apply hover:scale-110 active:scale-95;
+  }
+
+  .checker-piece.player1 {
+    @apply bg-player1 shadow-lg;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  }
+
+  .checker-piece.player2 {
+    @apply bg-player2 shadow-lg;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.1);
+    border: 2px solid hsl(0 0% 30%);
+  }
+
+  .checker-piece.king::after {
+    content: '♔';
+    @apply text-2xl font-bold;
+    color: hsl(47 96% 53%);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .board-square {
+    @apply aspect-square flex items-center justify-center relative;
+    @apply transition-colors duration-150;
+  }
+
+  .board-square.dark {
+    @apply bg-board-dark;
+  }
+
+  .board-square.light {
+    @apply bg-board-light;
+  }
+
+  .board-square.valid-move {
+    @apply cursor-pointer;
+  }
+
+  .board-square.valid-move::after {
+    content: '';
+    @apply absolute w-4 h-4 rounded-full bg-primary/40 animate-pulse;
+  }
+
+  .board-square.selected {
+    @apply ring-4 ring-primary ring-inset;
+  }
+}
+
+.rotate-180 {
+  transform: 'rotate(180deg)',
+}
