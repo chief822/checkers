@@ -17,7 +17,6 @@ export function GameBoard({
   currentPlayer,
   localPlayer
 }: GameBoardProps) {
-  const displayBoard = localPlayer === 1 ? board : [...board].reverse();
   const isValidMove = (row: number, col: number) => {
     return validMoves.some(move => move.row === row && move.col === col);
   };
@@ -40,8 +39,8 @@ export function GameBoard({
       </div>
 
       <div className="aspect-square bg-card rounded-lg shadow-2xl p-2 border-4 border-border">
-        <div className={`grid grid-cols-8 gap-0 h-full w-full`}>
-          {displayBoard.map((row, rowIndex) =>
+        <div className={`grid grid-cols-8 gap-0 h-full w-full ${localPlayer === 2 ? "rotate-180" : ""}`}>
+          {board.map((row, rowIndex) =>
             row.map((piece, colIndex) => {
               const isDark = (rowIndex + colIndex) % 2 === 1;
               const canClick = isDark && (isValidMove(rowIndex, colIndex) || (piece && piece.player === localPlayer));
@@ -55,6 +54,7 @@ export function GameBoard({
                     ${isValidMove(rowIndex, colIndex) ? 'valid-move' : ''}
                     ${isSelected(rowIndex, colIndex) ? 'selected' : ''}
                     ${!isPlayerTurn ? 'pointer-events-none' : ''}
+                    ${localPlayer === 2 ? "rotate-180" : ""}
                   `}
                   onClick={() => canClick && onSquareClick({ row: rowIndex, col: colIndex })}
                 >
@@ -95,15 +95,11 @@ export function GameBoard({
 }
 
 
-// await setElementStyles($0, {
-//   transform: 'rotate(180deg)',
-// });
+// $0.style.transform: 'rotate(180deg)';
 
 // const children = $0.children;
 // for (let i = 0; i < children.length; i++) {
-//   await setElementStyles(children[i], {
-//     transform: 'rotate(180deg)',
-//   });
+//   children[i].style.transform: 'rotate(180deg)';
 // }
 
 // -----------------

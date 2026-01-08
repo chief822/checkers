@@ -96,7 +96,3 @@
     @apply ring-4 ring-primary ring-inset;
   }
 }
-
-.rotate-180 {
-  transform: 'rotate(180deg)',
-}
