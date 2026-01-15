@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { GameBoard } from './GameBoard';
 import { ChatPanel } from './ChatPanel';
 import { GameState, Position, Player, ChatMessage, P2PMessage } from '@/types/game';
-import { initializeBoard, getValidMoves, makeMove, hasCaptures, checkWinner } from '@/lib/gameLogic';
+import { initializeBoard, getValidMoves, makeMove } from '@/lib/gameLogic';
 import { Button } from '@/components/ui/button';
 import { Trophy, RotateCcw } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -15,31 +15,29 @@ interface GameScreenProps {
 
 export function GameScreen({ localPlayer, isHost, onSendP2PMessage }: GameScreenProps) {
   const { toast } = useToast();
+  const {game, board} = initializeBoard();
   const [gameState, setGameState] = useState<GameState>(() => ({
-    board: initializeBoard(),
-    currentPlayer: 1,
+    board,
+    game,
+    currentPlayer: game.turn === 1 ? 1 : 2,
     selectedPosition: null,
     validMoves: [],
     gameOver: false,
     winner: null,
-    mustCapture: false
   }));
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
 
-  useEffect(() => {
-    const mustCapture = hasCaptures(gameState.board, gameState.currentPlayer);
-    setGameState(prev => ({ ...prev, mustCapture }));
-  }, [gameState.board, gameState.currentPlayer]);
-
   const handleSquareClick = useCallback((pos: Position) => {
+    console.log(localPlayer, gameState.currentPlayer);
+    console.log(gameState);
     if (gameState.gameOver || gameState.currentPlayer !== localPlayer) return;
-
+    console.log("here");
     const piece = gameState.board[pos.row][pos.col];
 
     // If clicking on own piece
     if (piece && piece.player === localPlayer) {
-      const moves = getValidMoves(gameState.board, pos, gameState.mustCapture);
+      const moves = getValidMoves(gameState.game, pos);
       setGameState(prev => ({
         ...prev,
         selectedPosition: pos,
@@ -52,17 +50,17 @@ export function GameScreen({ localPlayer, isHost, onSendP2PMessage }: GameScreen
     if (gameState.selectedPosition && gameState.validMoves.some(
       m => m.row === pos.row && m.col === pos.col
     )) {
-      const newBoard = makeMove(gameState.board, gameState.selectedPosition, pos);
-      const winner = checkWinner(newBoard, gameState.currentPlayer === 1 ? 2 : 1);
+      const newBoard = makeMove(gameState.game, gameState.selectedPosition, pos);
+      const winner = gameState.game.getWinner();
       
       const newGameState = {
         board: newBoard,
-        currentPlayer: (gameState.currentPlayer === 1 ? 2 : 1) as Player,
+        game: gameState.game,
+        currentPlayer: (gameState.game.turn === 1 ? 1 : 2) as Player,
         selectedPosition: null,
         validMoves: [],
         gameOver: winner !== null,
         winner,
-        mustCapture: false
       };
 
       setGameState(newGameState);
@@ -104,17 +102,18 @@ export function GameScreen({ localPlayer, isHost, onSendP2PMessage }: GameScreen
   const handleIncomingMessage = useCallback((message: P2PMessage) => {
     if (message.type === 'move') {
       const { from, to } = message.data;
-      const newBoard = makeMove(gameState.board, from, to);
-      const winner = checkWinner(newBoard, gameState.currentPlayer === 1 ? 2 : 1);
+      const newBoard = makeMove(gameState.game, from, to);
+      const winner: Player | null = gameState.game.getWinner();
+      console.log(winner);
 
       setGameState({
         board: newBoard,
-        currentPlayer: (gameState.currentPlayer === 1 ? 2 : 1) as Player,
+        game: gameState.game,
+        currentPlayer: gameState.game.turn === 1 ? 1 : 2,
         selectedPosition: null,
         validMoves: [],
         gameOver: winner !== null,
         winner,
-        mustCapture: false
       });
 
       if (winner) {
@@ -132,14 +131,15 @@ export function GameScreen({ localPlayer, isHost, onSendP2PMessage }: GameScreen
       };
       setMessages(prev => [...prev, chatMessage]);
     } else if (message.type === 'reset') {
+      const {game, board} = initializeBoard();
       setGameState({
-        board: initializeBoard(),
-        currentPlayer: 1,
+        board,
+        game,
+        currentPlayer: gameState.game.turn === 1 ? 1 : 2,
         selectedPosition: null,
         validMoves: [],
         gameOver: false,
         winner: null,
-        mustCapture: false
       });
       setMessages([]);
       toast({
@@ -158,14 +158,15 @@ export function GameScreen({ localPlayer, isHost, onSendP2PMessage }: GameScreen
   }, [handleIncomingMessage]);
 
   const handleReset = () => {
+    const {game, board} = initializeBoard();
     setGameState({
-      board: initializeBoard(),
-      currentPlayer: 1,
+      board,
+      game,
+      currentPlayer: gameState.game.turn === 1 ? 1 : 2,
       selectedPosition: null,
       validMoves: [],
       gameOver: false,
       winner: null,
-      mustCapture: false
     });
     setMessages([]);
     onSendP2PMessage({ type: 'reset', data: {} });

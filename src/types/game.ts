@@ -20,12 +20,12 @@ export interface Move {
 
 export interface GameState {
   board: Board;
+  game: any;
   currentPlayer: Player;
   selectedPosition: Position | null;
   validMoves: Position[];
-  gameOver: boolean;
+  gameOver: true | false;
   winner: Player | null;
-  mustCapture: boolean;
 }
 
 export interface ChatMessage {
