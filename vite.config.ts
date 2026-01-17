@@ -9,6 +9,7 @@ export default defineConfig({
     host: "::",
     port: 8080,
   },
+  base: "/checkers/",
   plugins: [
     react(),
     nodePolyfills(),
