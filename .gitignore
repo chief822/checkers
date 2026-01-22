@@ -22,3 +22,23 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Android build outputs
+*.apk
+*.aab
+
+# Android build directories
+android/app/build/
+android/build/
+
+# Gradle
+.gradle/
+build/
+
+# Local Android config
+android/local.properties
+
+# Keystores (VERY IMPORTANT)
+*.keystore
+*.jks
+

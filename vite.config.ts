@@ -9,7 +9,7 @@ export default defineConfig({
     host: "::",
     port: 8080,
   },
-  base: "/checkers/",
+  base: "./",		// fix for capacitor mobile
   plugins: [
     react(),
     nodePolyfills(),
