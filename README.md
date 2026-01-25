@@ -14,4 +14,5 @@ Use the debug version of apk using `npx cap run android`. output is in `android/
 Connection error:\
 First make sure you arent behind a restrictive NAT like symmetric NAT you can confirm with a free online tool like checkmynat otherwise switch to a different wifi.
 \
+\
 Trying making the other way instead. For example if device A is making the first offer when connecting with device B, start with device B instead. This may work as certain devices have restrictive firewall like limited UDP ports which make direct webrtc connection difficult. If still not try with different devices
