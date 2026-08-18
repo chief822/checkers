@@ -177,35 +177,66 @@ export function GameScreen({ localPlayer, isHost, onSendP2PMessage }: GameScreen
   };
 
   return (
-    <div className="min-h-screen p-4 bg-gradient-to-br from-background via-background to-muted">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            P2P Checkers
-          </h1>
-          <Button onClick={handleReset} variant="outline" className="gap-2">
-            <RotateCcw className="w-4 h-4" />
-            New Game
-          </Button>
-        </div>
+    <div className="min-h-screen bg-[#f4f1eb] text-[#292722]">
 
-        <div className="grid lg:grid-cols-[1fr_400px] gap-6">
+      <div className="mx-auto max-w-[1400px] px-4 py-5 sm:px-6 lg:px-8">
+
+        {/* Header */}
+        <header className="mb-6 flex items-center justify-between border-b border-[#ddd8cf] pb-4">
+
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#292722] text-white">
+              <span className="text-sm font-bold">♟</span>
+            </div>
+
+            <div>
+              <h1 className="text-lg font-semibold tracking-tight">
+                P2P Checkers
+              </h1>
+              <p className="text-[11px] text-[#918b81]">
+                Private peer-to-peer game
+              </p>
+            </div>
+          </div>
+
+          <Button
+            onClick={handleReset}
+            variant="outline"
+            className="h-9 gap-2 rounded-lg border-[#d7d2c9] bg-[#faf9f6] text-sm hover:bg-white"
+          >
+            <RotateCcw className="h-3.5 w-3.5" />
+            New game
+          </Button>
+
+        </header>
+
+        <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_360px]">
+
           <div>
             {gameState.gameOver && gameState.winner && (
-              <div className="mb-6 p-6 bg-card rounded-lg border-2 border-primary animate-glow">
+              <div className="mb-5 rounded-xl border border-[#d9c9a5] bg-[#fffaf0] px-5 py-4">
                 <div className="flex items-center gap-4">
-                  <Trophy className="w-12 h-12 text-primary" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#292722] text-white">
+                    <Trophy className="h-5 w-5" />
+                  </div>
+
                   <div>
-                    <h2 className="text-2xl font-bold">
-                      {gameState.winner === localPlayer ? 'You Won!' : 'Opponent Won!'}
+                    <h2 className="font-semibold">
+                      {gameState.winner === localPlayer
+                        ? 'You won'
+                        : 'Opponent won'}
                     </h2>
-                    <p className="text-muted-foreground">
-                      {gameState.winner === localPlayer ? 'Congratulations!' : 'Better luck next time!'}
+
+                    <p className="text-sm text-[#777168]">
+                      {gameState.winner === localPlayer
+                        ? 'Congratulations.'
+                        : 'Better luck next time.'}
                     </p>
                   </div>
                 </div>
               </div>
             )}
+
             <GameBoard
               board={gameState.board}
               selectedPosition={gameState.selectedPosition}
@@ -216,12 +247,13 @@ export function GameScreen({ localPlayer, isHost, onSendP2PMessage }: GameScreen
             />
           </div>
 
-          <div className="h-[600px]">
+          <div className="h-[600px] lg:sticky lg:top-6">
             <ChatPanel
               messages={messages}
               onSendMessage={handleSendMessage}
             />
           </div>
+
         </div>
       </div>
     </div>

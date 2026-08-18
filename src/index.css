@@ -96,3 +96,93 @@
     @apply ring-4 ring-primary ring-inset;
   }
 }
+.board-square {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    filter 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.board-square.light {
+  background: #e7d7bd;
+}
+
+.board-square.dark {
+  background: #8b5e3c;
+  cursor: pointer;
+}
+
+.board-square.dark:hover {
+  filter: brightness(1.06);
+}
+
+.board-square.selected {
+  box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.75);
+}
+
+.board-square.valid-move {
+  box-shadow: inset 0 0 0 4px rgba(255, 214, 112, 0.55);
+}
+
+.checker-piece {
+  position: relative;
+  width: 78%;
+  height: 78%;
+  border-radius: 50%;
+
+  box-shadow:
+    0 5px 8px rgba(0, 0, 0, 0.25),
+    inset 0 2px 2px rgba(255, 255, 255, 0.25);
+
+  transition:
+    transform 120ms ease,
+    filter 120ms ease;
+}
+
+.board-square:hover .checker-piece {
+  transform: translateY(-1px);
+}
+
+.checker-piece.player1 {
+  background:
+    radial-gradient(
+      circle at 35% 28%,
+      #e96862 0%,
+      #b93632 45%,
+      #7d2422 100%
+    );
+
+  border: 3px solid #701f1d;
+}
+
+.checker-piece.player2 {
+  background:
+    radial-gradient(
+      circle at 35% 28%,
+      #55524e 0%,
+      #292824 45%,
+      #11100f 100%
+    );
+
+  border: 3px solid #0d0c0b;
+}
+
+.checker-piece.king::after {
+  content: '♛';
+
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.25rem;
+  font-weight: 700;
+
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
