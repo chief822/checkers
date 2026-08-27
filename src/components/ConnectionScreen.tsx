@@ -252,7 +252,7 @@ export function ConnectionScreen({
           </p>
 
           <h1 className="text-4xl font-semibold tracking-tight">
-            P2P Checkers
+            Peer to Peer Checkers
           </h1>
 
           <p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-[#777168]">
